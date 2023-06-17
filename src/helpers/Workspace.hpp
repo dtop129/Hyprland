@@ -49,8 +49,8 @@ class CWorkspace {
     bool m_bDefaultFloating = false;
     bool m_bDefaultPseudo   = false;
 
-    // last monitor (used on reconnect)
-    std::string m_szLastMonitor = "";
+    // don't destroy in sanity check
+    bool m_bIndestructible = false;
 
     // Whether the user configured command for on-created-empty has been executed, if any
     bool        m_bOnCreatedEmptyExecuted = false;

@@ -2190,7 +2190,7 @@ void CCompositor::moveWorkspaceToMonitor(CWorkspace* pWorkspace, CMonitor* pMoni
 
     // fix old mon
     int nextWorkspaceOnMonitorID = -1;
-    if (!SWITCHINGISACTIVE)
+    if (!SWITCHINGISACTIVE || POLDMON->aboutToDie)
         nextWorkspaceOnMonitorID = pWorkspace->m_iID;
     else {
         for (auto& w : m_vWorkspaces) {
@@ -2224,7 +2224,7 @@ void CCompositor::moveWorkspaceToMonitor(CWorkspace* pWorkspace, CMonitor* pMoni
 
     for (auto& w : m_vWindows) {
         if (w->m_iWorkspaceID == pWorkspace->m_iID) {
-            if (w->m_bPinned) {
+            if (w->m_bPinned && !POLDMON->aboutToDie) {
                 w->m_iWorkspaceID = nextWorkspaceOnMonitorID;
                 continue;
             }
@@ -2235,7 +2235,7 @@ void CCompositor::moveWorkspaceToMonitor(CWorkspace* pWorkspace, CMonitor* pMoni
             if (w->m_bIsMapped && !w->isHidden()) {
                 if (POLDMON) {
                     if (w->m_bIsFloating)
-                        w->m_vRealPosition = w->m_vRealPosition.vec() - POLDMON->vecPosition + pMonitor->vecPosition;
+                        w->m_vRealPosition = w->m_vRealPosition.goalv() - POLDMON->vecPosition + pMonitor->vecPosition;
 
                     if (w->m_bIsFullscreen) {
                         w->m_vRealPosition = pMonitor->vecPosition;
@@ -2268,7 +2268,7 @@ void CCompositor::moveWorkspaceToMonitor(CWorkspace* pWorkspace, CMonitor* pMoni
     }
 
     // finalize
-    if (POLDMON) {
+    if (POLDMON && !POLDMON->aboutToDie) {
         g_pLayoutManager->getCurrentLayout()->recalculateMonitor(POLDMON->ID);
         updateFullscreenFadeOnWorkspace(getWorkspaceByID(POLDMON->activeWorkspace));
     }
