@@ -953,6 +953,12 @@ void CCompositor::focusWindow(CWindow* pWindow, wlr_surface* pSurface) {
         return;
     }
 
+    auto PFORCEFOCUS = getForceFocus();
+    if (PFORCEFOCUS && PFORCEFOCUS != pWindow) {
+        Debug::log(LOG, "Disallowing setting focus to a window due to there being a window with stayfocused rule.");
+        return;
+    }
+
     g_pLayoutManager->getCurrentLayout()->bringWindowToTop(pWindow);
 
     if (!pWindow || !windowValidMapped(pWindow)) {
