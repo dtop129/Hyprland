@@ -726,7 +726,11 @@ void Events::listener_unmapWindow(void* owner, void* data) {
 
     // refocus on a new window if needed
     if (wasLastWindow) {
-        const auto PWINDOWCANDIDATE = g_pLayoutManager->getCurrentLayout()->getNextWindowCandidate(PWINDOW);
+        auto PWINDOWCANDIDATE = g_pLayoutManager->getCurrentLayout()->getNextWindowCandidate(PWINDOW);
+
+        //may happen when switching monitors with a stayfocused window
+        if (PWINDOWCANDIDATE && PWINDOWCANDIDATE->m_iMonitorID != g_pCompositor->m_pLastMonitor->ID)
+            PWINDOWCANDIDATE = g_pCompositor->getFirstWindowOnWorkspace(g_pCompositor->m_pLastMonitor->activeWorkspace);
 
         Debug::log(LOG, "On closed window, new focused candidate is {}", PWINDOWCANDIDATE);
 
