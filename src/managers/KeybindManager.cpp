@@ -231,7 +231,10 @@ bool CKeybindManager::tryMoveFocusToMonitor(CMonitor* monitor) {
 
     const auto PNEWWORKSPACE = monitor->specialWorkspaceID != 0 ? g_pCompositor->getWorkspaceByID(monitor->specialWorkspaceID) : PNEWMAINWORKSPACE;
 
-    const auto PNEWWINDOW = PNEWWORKSPACE->getLastFocusedWindow();
+    auto PNEWWINDOW = PNEWWORKSPACE->getLastFocusedWindow();
+    if (!PNEWWINDOW)
+        PNEWWINDOW = g_pCompositor->getFirstWindowOnWorkspace(PNEWWORKSPACE->m_iID);
+
     if (PNEWWINDOW) {
         g_pCompositor->focusWindow(PNEWWINDOW);
         g_pCompositor->warpCursorTo(PNEWWINDOW->middle());
