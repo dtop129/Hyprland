@@ -678,7 +678,7 @@ void CWindow::applyDynamicRule(const SWindowRule& r) {
     }
 }
 
-void CWindow::updateDynamicRules() {
+void CWindow::updateDynamicRules(bool norecalculate) {
     m_sSpecialRenderData.activeBorderColor   = CGradientValueData();
     m_sSpecialRenderData.inactiveBorderColor = CGradientValueData();
     m_sSpecialRenderData.alpha               = 1.f;
@@ -706,7 +706,8 @@ void CWindow::updateDynamicRules() {
         applyDynamicRule(r);
     }
 
-    g_pLayoutManager->getCurrentLayout()->recalculateMonitor(m_iMonitorID);
+    if (!norecalculate)
+        g_pLayoutManager->getCurrentLayout()->recalculateMonitor(m_iMonitorID);
 }
 
 // check if the point is "hidden" under a rounded corner of the window

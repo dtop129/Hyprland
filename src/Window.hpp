@@ -364,7 +364,7 @@ class CWindow {
     void                     setHidden(bool hidden);
     bool                     isHidden();
     void                     applyDynamicRule(const SWindowRule& r);
-    void                     updateDynamicRules();
+    void                     updateDynamicRules(bool norecalculate = false);
     SWindowDecorationExtents getFullWindowReservedArea();
     Vector2D                 middle();
     bool                     opaque();
